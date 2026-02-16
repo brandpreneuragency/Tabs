@@ -1,0 +1,5 @@
+{
+  "name": "TabbedDocs",
+  "description": "A lightweight word processor combining Chrome-style tabs with a clean document editing interface.",
+  "requestFramePermissions": []
+}

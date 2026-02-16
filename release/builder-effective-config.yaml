@@ -1,0 +1,16 @@
+directories:
+  output: release
+  buildResources: build
+appId: com.tabbeddocs.app
+productName: TabbedDocs
+files:
+  - filter:
+      - dist/**/*
+      - electron/**/*
+      - package.json
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+electronVersion: 37.10.3

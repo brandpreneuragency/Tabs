@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TabbedDocs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --editor-p: 16px;
+        --editor-h3: 20px;
+        --editor-h2: 24px;
+        --editor-h1: 28px;
+      }
+
+      * {
+        transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease;
+      }
+
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #c1c1c1; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8; 
+      }
+      
+      .dark ::-webkit-scrollbar-track {
+        background: #1f2937;
+      }
+      .dark ::-webkit-scrollbar-thumb {
+        background: #4b5563;
+      }
+      
+      #editor-content, #editor-content p, #editor-content div {
+        font-size: var(--editor-p);
+        line-height: 1.6;
+      }
+      
+      #editor-content p, #editor-content div {
+        margin-bottom: 0.75rem;
+      }
+
+      #editor-content h1 {
+        font-size: var(--editor-h1);
+        font-weight: 700;
+        line-height: 1.2;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+      }
+      #editor-content h2 {
+        font-size: var(--editor-h2);
+        font-weight: 700;
+        line-height: 1.3;
+        margin-top: 1.25rem;
+        margin-bottom: 0.75rem;
+      }
+      #editor-content h3 {
+        font-size: var(--editor-h3);
+        font-weight: 700;
+        line-height: 1.4;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      #editor-content ul {
+        list-style-type: disc;
+        margin-left: 1.5rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+      #editor-content ol {
+        list-style-type: decimal;
+        margin-left: 1.5rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+      #editor-content li {
+        margin-bottom: 0.25rem;
+      }
+
+      #editor-content:empty:before {
+        content: attr(data-placeholder);
+        color: rgba(0, 0, 0, 0.25);
+        pointer-events: none;
+        display: block;
+      }
+      .dark #editor-content:empty:before {
+        color: rgba(255, 255, 255, 0.25);
+      }
+
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      @media print {
+        @page {
+          margin: 1in;
+        }
+        body {
+          background: white !important;
+          color: black !important;
+        }
+        /* Hide everything by default */
+        body > *, #root > *, .sticky, .fixed, button, select, [role="tooltip"] {
+          display: none !important;
+        }
+        /* Show only the editor content */
+        #root, .print-container, #editor-content {
+          display: block !important;
+          visibility: visible !important;
+          position: static !important;
+          width: 100% !important;
+          height: auto !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          box-shadow: none !important;
+          border: none !important;
+          overflow: visible !important;
+        }
+      }
+    </style>
+</head>
+  <body class="bg-gray-100 overflow-hidden h-screen w-screen">
+    <div id="root" class="h-full w-full flex flex-col"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
