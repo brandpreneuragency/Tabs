@@ -506,52 +506,52 @@ const App: React.FC = () => {
         onLoadDoc={handleLoadFromLibrary}
       />
 
-      {/* FAB Container - Row orientation */}
-      <div ref={fabRef} className="fixed bottom-6 right-4 sm:right-6 z-50 flex flex-row-reverse items-center gap-2 sm:gap-3">
-        {/* Toggle Button */}
+      {/* Hamburger Menu */}
+      <div ref={fabRef} className="fixed bottom-6 right-4 sm:right-6 z-50">
         <button
           onClick={() => setIsFabOpen(!isFabOpen)}
-          className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-2xl flex items-center justify-center transition-all hover:rotate-90 active:scale-90 shrink-0 ${isFabOpen ? 'bg-gray-600 text-white' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+          className="w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-2xl flex items-center justify-center transition-all active:scale-90 shrink-0 bg-blue-600 text-white hover:bg-blue-700"
+          title="Open menu"
         >
-          <i className={`fas ${isFabOpen ? 'fa-times' : 'fa-cog'} text-lg sm:text-xl`}></i>
+          <i className={`fas ${isFabOpen ? 'fa-times' : 'fa-bars'} text-lg sm:text-xl`}></i>
         </button>
 
-        {/* Menu Buttons in 1 Row - Optimized for mobile */}
+        {/* Dropdown Menu Items */}
         {isFabOpen && (
-          <div className="flex flex-row items-center gap-1.5 sm:gap-2 animate-in slide-in-from-right-5 duration-200 overflow-x-auto no-scrollbar max-w-[calc(100vw-80px)] sm:max-w-[calc(100vw-120px)]">
+          <div className={`absolute bottom-16 sm:bottom-[72px] right-0 w-48 p-2 rounded-2xl shadow-2xl border space-y-1.5 animate-in slide-in-from-bottom-3 duration-200 ${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'}`}>
             <button
-              onClick={handleSaveToLibrary}
-              className={`${fabButtonClass} ${isDarkMode ? 'bg-gray-800 border-gray-700 text-blue-400' : 'bg-white border-gray-200 text-blue-600'}`}
+              onClick={() => { handleSaveToLibrary(); setIsFabOpen(false); }}
+              className={`${fabButtonClass} w-full justify-start ${isDarkMode ? 'bg-gray-800 border-gray-700 text-blue-400' : 'bg-white border-gray-200 text-blue-600'}`}
             >
               <i className="fas fa-save"></i> Save
             </button>
             <button
               onClick={() => { setIsLibraryOpen(true); setIsFabOpen(false); }}
-              className={`${fabButtonClass} ${isDarkMode ? 'bg-gray-800 border-gray-700 text-amber-400' : 'bg-white border-gray-200 text-amber-600'}`}
+              className={`${fabButtonClass} w-full justify-start ${isDarkMode ? 'bg-gray-800 border-gray-700 text-amber-400' : 'bg-white border-gray-200 text-amber-600'}`}
             >
               <i className="fas fa-folder-open"></i> Open
             </button>
             <button
-              onClick={() => handleExport('pdf')}
-              className={`${fabButtonClass} ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200' : 'bg-white border-gray-200 text-gray-700'}`}
+              onClick={() => { handleExport('pdf'); setIsFabOpen(false); }}
+              className={`${fabButtonClass} w-full justify-start ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200' : 'bg-white border-gray-200 text-gray-700'}`}
             >
               <i className="fas fa-file-pdf text-red-500"></i> PDF
             </button>
             <button
-              onClick={() => handleExport('docx')}
-              className={`${fabButtonClass} ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200' : 'bg-white border-gray-200 text-gray-700'}`}
+              onClick={() => { handleExport('docx'); setIsFabOpen(false); }}
+              className={`${fabButtonClass} w-full justify-start ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200' : 'bg-white border-gray-200 text-gray-700'}`}
             >
               <i className="fas fa-file-word text-blue-500"></i> Word
             </button>
             <button
               onClick={() => { setIsDarkMode(!isDarkMode); setIsFabOpen(false); }}
-              className={`${fabButtonClass} ${isDarkMode ? 'bg-gray-800 border-gray-700 text-yellow-400' : 'bg-white border-gray-200 text-gray-700'}`}
+              className={`${fabButtonClass} w-full justify-start ${isDarkMode ? 'bg-gray-800 border-gray-700 text-yellow-400' : 'bg-white border-gray-200 text-gray-700'}`}
             >
               <i className={`fas ${isDarkMode ? 'fa-sun' : 'fa-moon'}`}></i> {isDarkMode ? 'Light' : 'Dark'}
             </button>
             <button
               onClick={() => { setIsApiKeyWallOpen(true); setIsFabOpen(false); }}
-              className={`${fabButtonClass} ${apiKey ? (isDarkMode ? 'bg-gray-800 border-gray-700 text-green-400' : 'bg-white border-gray-200 text-green-700') : (isDarkMode ? 'bg-gray-800 border-gray-700 text-orange-400' : 'bg-white border-gray-200 text-orange-700')}`}
+              className={`${fabButtonClass} w-full justify-start ${apiKey ? (isDarkMode ? 'bg-gray-800 border-gray-700 text-green-400' : 'bg-white border-gray-200 text-green-700') : (isDarkMode ? 'bg-gray-800 border-gray-700 text-orange-400' : 'bg-white border-gray-200 text-orange-700')}`}
             >
               <i className={`fas ${apiKey ? 'fa-key' : 'fa-lock'}`}></i> {apiKey ? 'AI Key' : 'Enable AI'}
             </button>
