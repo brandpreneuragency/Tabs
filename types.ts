@@ -26,6 +26,18 @@ export interface SelectionState {
   rect: DOMRect | null;
 }
 
+export interface ModelOption {
+  id: string;
+  name: string;
+  vibe: string;
+}
+
+export interface ModelCategory {
+  id: string;
+  label: string;
+  models: ModelOption[];
+}
+
 export enum FontType {
   SANS = 'Arial, sans-serif',
   SERIF = 'Times New Roman, serif',

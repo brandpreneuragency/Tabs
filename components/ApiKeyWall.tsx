@@ -5,6 +5,9 @@ interface ApiKeyWallProps {
   isDarkMode: boolean;
   isDesktop: boolean;
   hasApiKey: boolean;
+  selectedModelName: string;
+  keyLabel: string;
+  keyPlaceholder: string;
   onSave: (key: string) => Promise<void>;
   onRemove: () => Promise<void>;
   onClose: () => void;
@@ -15,6 +18,9 @@ const ApiKeyWall: React.FC<ApiKeyWallProps> = ({
   isDarkMode,
   isDesktop,
   hasApiKey,
+  selectedModelName,
+  keyLabel,
+  keyPlaceholder,
   onSave,
   onRemove,
   onClose,
@@ -39,7 +45,7 @@ const ApiKeyWall: React.FC<ApiKeyWallProps> = ({
     e.preventDefault();
     const trimmed = inputValue.trim();
     if (!trimmed) {
-      setError('Please enter your Gemini API key.');
+      setError(`Please enter your ${keyLabel}.`);
       return;
     }
 
@@ -74,19 +80,19 @@ const ApiKeyWall: React.FC<ApiKeyWallProps> = ({
         <div className={`px-5 py-4 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
           <h2 className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Unlock AI Assistant</h2>
           <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-            Enter your Gemini API key to enable AI features.
+            Enter your {keyLabel} for {selectedModelName} to enable AI features.
           </p>
         </div>
 
         <form onSubmit={handleSave} className="px-5 py-4 space-y-3">
           <label className={`block text-xs font-semibold uppercase tracking-wider ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-            Gemini API Key
+            {keyLabel}
           </label>
           <input
             type="password"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            placeholder="AIza..."
+            placeholder={keyPlaceholder}
             autoFocus
             className={`w-full rounded-xl px-3 py-2 text-sm outline-none border ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-100 focus:ring-2 focus:ring-purple-500/40' : 'bg-gray-50 border-gray-200 text-gray-900 focus:ring-2 focus:ring-purple-200'}`}
           />

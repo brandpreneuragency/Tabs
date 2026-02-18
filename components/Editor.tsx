@@ -55,7 +55,7 @@ const Editor: React.FC<EditorProps> = ({ content, onChange, isActive, isDarkMode
 
   return (
     <div 
-      className={`flex-1 overflow-y-auto cursor-text transition-colors duration-300 print-container ${isDarkMode ? 'bg-gray-950' : 'bg-gray-100'}`} 
+      className={`h-full overflow-y-auto cursor-text transition-colors duration-300 print-container ${isDarkMode ? 'bg-gray-950' : 'bg-gray-100'}`} 
       onClick={() => {
         if (editorRef.current && document.activeElement !== editorRef.current) {
             editorRef.current.focus();

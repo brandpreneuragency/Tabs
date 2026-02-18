@@ -6,12 +6,14 @@ import ContextMenu from './components/ContextMenu';
 import AiChatbox from './components/AiChatbox';
 import LibraryModal from './components/LibraryModal';
 import ApiKeyWall from './components/ApiKeyWall';
+import { DEFAULT_MODEL_ID, MODEL_CATEGORIES } from './config/modelCatalog';
 import { DocumentData, ContextMenuState, SelectionState, LibraryItem } from './types';
 
 const STORAGE_KEY = 'tabbed-docs-data';
 const THEME_KEY = 'tabbed-docs-theme';
 const SIZE_KEY = 'tabbed-docs-font-size';
 const LIBRARY_KEY = 'tabbed-docs-library';
+const MODEL_KEY = 'tabbed-docs-selected-model';
 
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
@@ -34,6 +36,7 @@ const App: React.FC = () => {
   const [isApiKeyWallOpen, setIsApiKeyWallOpen] = useState(false);
   const [isAiSidebarCollapsed, setIsAiSidebarCollapsed] = useState(false);
   const [apiKey, setApiKey] = useState<string | null>(null);
+  const [selectedModelId, setSelectedModelId] = useState(DEFAULT_MODEL_ID);
   const [isApiKeyReady, setIsApiKeyReady] = useState(false);
   const [selection, setSelection] = useState<SelectionState>({ text: '', rect: null });
   const [contextMenu, setContextMenu] = useState<ContextMenuState>({
@@ -52,6 +55,7 @@ const App: React.FC = () => {
     const saved = localStorage.getItem(STORAGE_KEY);
     const savedTheme = localStorage.getItem(THEME_KEY);
     const savedSize = localStorage.getItem(SIZE_KEY);
+    const savedModel = localStorage.getItem(MODEL_KEY);
     
     if (savedTheme) {
       setIsDarkMode(savedTheme === 'dark');
@@ -61,6 +65,10 @@ const App: React.FC = () => {
 
     if (savedSize) {
       setBaseFontSize(parseInt(savedSize, 10) || 16);
+    }
+
+    if (savedModel) {
+      setSelectedModelId(savedModel);
     }
 
     if (saved) {
@@ -97,6 +105,12 @@ const App: React.FC = () => {
       localStorage.setItem(SIZE_KEY, baseFontSize.toString());
     }
   }, [baseFontSize, loaded]);
+
+  useEffect(() => {
+    if (loaded) {
+      localStorage.setItem(MODEL_KEY, selectedModelId);
+    }
+  }, [selectedModelId, loaded]);
 
   useEffect(() => {
     let mounted = true;
@@ -384,6 +398,25 @@ const App: React.FC = () => {
   const sidebarToggleBaseClass = 'absolute right-3 top-3 w-10 h-10 rounded-xl shadow-md z-30 flex items-center justify-center transition-colors text-white';
   const sidebarToggleOpenClass = 'bg-blue-600 hover:bg-blue-700';
   const sidebarToggleCloseClass = 'bg-gray-600 hover:bg-gray-700';
+  const selectedModel = MODEL_CATEGORIES.flatMap(category => category.models).find(model => model.id === selectedModelId);
+  const selectedModelName = selectedModel?.name || 'Selected Model';
+  const providerRaw = (selectedModel?.id.split('/')[0] || 'model').toLowerCase();
+  const providerLabelMap: Record<string, string> = {
+    openai: 'OpenAI',
+    anthropic: 'Anthropic',
+    google: 'Google',
+    'meta-llama': 'Meta Llama',
+    deepseek: 'DeepSeek',
+  };
+  const keyLabel = `${providerLabelMap[providerRaw] || providerRaw.toUpperCase()} API Key`;
+  const keyPlaceholderMap: Record<string, string> = {
+    openai: 'sk-... ',
+    anthropic: 'sk-ant-... ',
+    google: 'AIza... ',
+    'meta-llama': 'sk-or-... ',
+    deepseek: 'sk-... ',
+  };
+  const keyPlaceholder = (keyPlaceholderMap[providerRaw] || 'sk-...').trim();
 
   return (
     <div className={`flex flex-col h-screen overflow-hidden ${isDarkMode ? 'dark bg-gray-900' : 'bg-white'}`}>
@@ -448,6 +481,8 @@ const App: React.FC = () => {
               isDarkMode={isDarkMode}
               isDesktop={isDesktop}
               apiKey={apiKey}
+              selectedModelId={selectedModelId}
+              onSelectModel={setSelectedModelId}
               onRequireApiKey={() => setIsApiKeyWallOpen(true)}
               onReplace={handleAiReplace} 
               onInsert={handleAiInsert}
@@ -529,6 +564,9 @@ const App: React.FC = () => {
         isDarkMode={isDarkMode}
         isDesktop={isDesktop}
         hasApiKey={!!apiKey}
+        selectedModelName={selectedModelName}
+        keyLabel={keyLabel}
+        keyPlaceholder={keyPlaceholder}
         onSave={handleSaveApiKey}
         onRemove={handleRemoveApiKey}
         onClose={() => setIsApiKeyWallOpen(false)}
